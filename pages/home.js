@@ -43,22 +43,72 @@ function createCards(data) {
 
 // input y search
 
-
 // search.addEventListener("keyup", function (event) {
 //   let evento = data.events.filter((cE) => {
 //     return cE.name.toLowerCase().includes(event.target.value.toLowerCase());
 //   });
 //   console.log(evento);
 // });
+let applied = {};
+
+function filter(fn, value) {
+  let event = data.events;
+
+  applied[fn] = value;
+
+  console.log(applied);
+
+  for (let name in applied) {
+    if (name == "isEvent") {
+      event = event.filter(cE => cE.name.toLowerCase().includes(applied[name].toLowerCase()))
+    }
+    if (name == "matchesWithText") {
+      event = event.filter(value => value.category.includes(applied[name]))
+    }
+  }
+
+  return event;
+}
+
+function updateCards(element, data, fn) {
+  element.innerHTML = "";
+  data.forEach(fn);
+}
+
+// let inputButton = document.getElementById("js-button");
+// inputButton.addEventListener("click", function () {
+//   let inputSearch = document.getElementById("js-search");
+//   let evento = data.events.filter((cE) => {
+//     return cE.name.toLowerCase().includes(inputSearch.value.toLowerCase());
+//   });
+
+//   updateCards(container18, evento, createCards);
+// });
 
 let inputButton = document.getElementById("js-button");
-inputButton.addEventListener("click", function () {
+inputButton.addEventListener("click", function (event) {
   let inputSearch = document.getElementById("js-search");
-  let evento = data.events.filter((cE) => {
-    return cE.name.toLowerCase().includes(inputSearch.value.toLowerCase());
-  });
- container18.innerHTML = ""
- evento.forEach(createCards)
+  console.log(inputSearch.value);
+  event = filter("isEvent", inputSearch.value);
+  console.log(event);
+  updateCards(container18, event, createCards);
+  // Swal.fire({
+  //   icon: 'error',
+  //   title: 'Oops...',
+  // text: '¡No Matches!',
+  //   width: 600,
+  //   padding: '3em',
+  //   color: '#716add',
+  //   background: '#fff url(/images/trees.png)',
+  //   backdrop: `
+  //     rgba(0,0,123,0.4)
+  //     url("https://raw.githubusercontent.com/sweetalert2/sweetalert2.github.io/master/images/nyan-cat.gif")
+  //     left top
+  //     no-repeat
+  //   `
+  // })
+  // container18.innerHTML = "";
+  // evento.forEach(createCards);
 });
 
 // categories events
@@ -69,6 +119,7 @@ let categoriesEvents = data.events.map((event) => event.category);
 console.log(categoriesEvents);
 let categoriesEventsFilter = [...new Set(categoriesEvents)];
 console.log(categoriesEventsFilter);
+
 categoriesEventsFilter.forEach(createCheckBoxes);
 console.log(categoriesEventsFilter);
 
@@ -88,9 +139,11 @@ function createCheckBoxes(category) {
 }
 
 let inputCheckbox = document.getElementById("js-container-check");
+
 inputCheckbox.addEventListener("change", function (event) {
+  event = filter("matchesWithText", event.target.value);
   console.log(event);
-
+  updateCards(container18, event, createCards);
+  // container18.innerHTML = "";
+  // category.forEach(createCards);
 });
-
-
