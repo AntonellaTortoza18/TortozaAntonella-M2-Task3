@@ -2,15 +2,6 @@ let container18 = document.getElementById("container18");
 let containerCheckBoxes = document.getElementById("js-container-check");
 let inputButton = document.getElementById("js-button");
 
-
-let upcomingEvents = data.events.filter(function (event) {
-  if (data.currentDate < event.date) {
-    return event;
-  }
-});
-
-
-
 function createCards(data) {
   container18.innerHTML = "";
   if (data.length > 0) {
@@ -26,7 +17,7 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: $${events.price}</p>
-              <a href="../pages/details.html" class="btn btn-dark">Read More></a>
+              <a href="./pages/details.html" class="btn btn-dark">Read More></a>
             </div>
             `;
       container18.appendChild(div);
@@ -49,12 +40,16 @@ function createCards(data) {
     });
   }
 }
-createCards(upcomingEvents);
-
+createCards(data.events);
 
 //FILTRADO DE CATEGORIAS Y ELIMINACION DE DUPLICADOS:
-let categoriesEvents = upcomingEvents.map((event) => event.category);
+let categoriesEvents = data.events.map((event) => event.category);
+//Recorro el array de eventos con map y separo de este la propiedad categorias.
+console.log(categoriesEvents);
+//Dado que al recorrer el array anterior me va a dar todas las categorias, con el metodo set elimino las repetidas y dejo solo el primer elemento encontrado, el resto lo descarta y guardo el dato obtenido con el metodo anterior en la variable categoriesEventsFilter.
 let categoriesEventsFilter = [...new Set(categoriesEvents)];
+
+//CREACION DE CHECKBOX DINAMICOS: declaro dentro de la funcion createCheckBoxes la variable vacia checkContainer, luego con la funcion forEach recorro categoriesEventsFilter, que son las categorias que habia filtrado anteriormente, para que pueda recoorer el array completo y utilice el parametro categoria para que en cada vuelta del forEacg aloje en checContainer el templete, luego llamo al dom, al elemento padre, que es containerCheckBoxes y le imprimo el contenido de checkContainer. .
 
 function createCheckBoxes() {
   checkContainer = "";
@@ -78,14 +73,13 @@ function createCheckBoxes() {
 createCheckBoxes();
 
 //APLICACION DE ESCUCHADOR DE EVENTOS A LOS CHECKBOX: creo la variable checksSelected para poder guardar los eventos con clickeo o desclickeo, luego llamo a todos los elementos input con su clase y los guardo en una constante checBoxes para luego usarlos en la funcion.
-
 let checksSelected = [];
 const checkBoxes = document.querySelectorAll(".form-check-input");
 
 //Con forEach recorro el array checBoxes que almacena todos los input, para aplicarle a c/u de sus checks un escuchador de eventos de tipo click, y creo un condicional, en el cual establezco que al escuchar click, es decir true, se ingrese el valor del evento mediante el push al array que habia dejado vacio de checksSelected, y que de lo contrario lo filtre.
 // En cada condicional, sea true o false, llamo a la funcion de filtradoCombinadoCyS que me traera el contenido correspondiente.
 // esta funcion queda guardada en checksSelected para usarla en el filtrado.
-
+ 
 checkBoxes.forEach((checks) => {
   checks.addEventListener("click", (event) => {
     let checked = event.target.checked;
@@ -101,7 +95,6 @@ checkBoxes.forEach((checks) => {
   });
 });
 
-
 //APLICACION DE ESCUCHADOR DE EVENTOS A LA BARRA SEARCH: creo una variable vacia de tipo string, llamada searchText para guardar los eventos de tipo keyup. Luego llamo y guardo el elemento (js-search) en la variable variable inputSearch, para usarlos en la funcion.
 
 let searchText = "";
@@ -111,7 +104,15 @@ inputSearch.addEventListener("input", function (evento) {
   filtradoCombinadoCyS();
 });
 
-//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH: CREO UNA VARIABLE DATOS  PARA USARLA COMO PARAMETRO LUEGO. ESTABLEZCO 4 POSIBILIDADES DE COMBINACION DE FILTROS.
+// inputButton.addEventListener("click", function (event) {
+//   let evento = data.events.filter((cE) => {
+//     return cE.name.toLowerCase().includes(searchText.value.toLowerCase());
+//   });
+//   container18.innerHTML = "";
+//   evento.forEach(createCards);
+// });
+
+//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH: CREO UNA VARIABLE DATOS DE TIPO STRING PARA USARLA COMO PARAMETRO LUEGO. ESTABLEZCO 4 POSIBILIDADES DE COMBINACION DE FILTROS.
 //1 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES MAYOR A CERO (HAY AL MENOS 1 CLICK) Y QUE SEARCHTEXT ES DIFERENTE A UN ARRAY VACIO (TIENE ALGUN VALOR) SE INCLUYA CON PUSH (A DATOS) EL FILTRO A EVENTOS MOSTRANDO EL NOMBRE DEL MISMO EN MINUSCULAS (CON METODO INCLUDES Y TRIM ELIMINANDO ESPACIOS) Y MUESTRE ADEMAS LA CATEGORIA DEL EVENTO SEGUN SU VALOR.
 //2 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES MAYOR A CERO (HAY AL MENOS 1 CLICK) Y QUE SEARCHTEXT ES IGUAL A UN ARRAY VACIO (NO TIENE NINGUN VALOR) SE INCLUYA CON PUSH (A DATOS) LA CATEGORIA DEL EVENTO SEGUN SU VALOR.
 //3 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES IGUAL A CERO (ESTA VACIO) Y QUE SEARCHTEXT ES DIFERENTE A UN ARRAY VACIO (TIENE ALGUN VALOR) SE INCLUYA CON PUSH (A DATOS) EL FILTRO A EVENTOS MOSTRANDO EL NOMBRE DEL MISMO EN MINUSCULAS (CON METODO INCLUDES Y TRIM ELIMINANDO ESPACIOS).
@@ -123,7 +124,7 @@ function filtradoCombinadoCyS() {
   if (checksSelected.length > 0 && searchText !== "") {
     checksSelected.map((categoria) =>
       datos.push(
-        ...upcomingEvents.filter(
+        ...data.events.filter(
           (evento) =>
             evento.name
               .toLowerCase()
@@ -135,12 +136,12 @@ function filtradoCombinadoCyS() {
   } else if (checksSelected.length > 0 && searchText == "") {
     checksSelected.map((categoria) =>
       datos.push(
-        ...upcomingEvents.filter((evento) => evento.category == categoria)
+        ...data.events.filter((evento) => evento.category == categoria)
       )
     );
   } else if (checksSelected.length == 0 && searchText !== "") {
     datos.push(
-      ...upcomingEvents.filter(
+      ...data.events.filter(
         (evento) =>
           evento.name.toLowerCase().includes(searchText.trim().toLowerCase()) ||
           evento.category
@@ -149,8 +150,11 @@ function filtradoCombinadoCyS() {
       )
     );
   } else {
-    datos.push(...upcomingEvents);
+    datos.push(...data.events);
   }
   createCards(datos);
 }
 filtradoCombinadoCyS();
+
+//  alt + 96 backticks
+// alt + 39 '' comillas simples

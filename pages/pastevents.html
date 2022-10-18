@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
     <title>Amazing Events - Past Events</title>
     <link
       rel="shortcut icon"
@@ -57,100 +60,27 @@
           </div>
         </div>
       </nav>
-      <h1 class="text-center p-4">Past Events</h1>
+      <h1 class="text-center p-4 animate-charcter">Past Events</h1>
     </header>
 
     <main class="">
       <div
         class="d-flex align-items-center justify-content-around flex-wrap p-1"
       >
-        <div class="checks">
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox1"
-              value="option1"
-            />
-            <label class="form-check-label" for="inlineCheckbox1"
-              >Food Fair</label
-            >
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2">Museum</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2"
-              >Costume Party</label
-            >
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2"
-              >Music Concert</label
-            >
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2">Race</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2"
-              >Book Exchange</label
-            >
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="inlineCheckbox2"
-              value="option2"
-            />
-            <label class="form-check-label" for="inlineCheckbox2">Cinema</label>
-          </div>
-        </div>
-
+      <div id="js-container-check" ></div>
         <div>
           <nav class="navbar">
             <div class="container-fluid">
               <form class="d-flex" role="search">
-                <input
+                <input id="js-search"
                   class="form-control me-2"
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button class="btn btn-outline-success" type="submit">
-                  Search
-                </button>
+                <input  id="js-button" class="btn btn-outline-success" type="button" value="Search"/>
+               
+              
               </form>
             </div>
           </nav>
@@ -220,5 +150,6 @@
     ></script>
     <script src="./data.js"></script>
     <script src="./pastevents.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>
