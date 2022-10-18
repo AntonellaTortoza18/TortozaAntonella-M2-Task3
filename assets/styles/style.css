@@ -29,13 +29,34 @@ footer {
   min-height: 10vh;
 }
 
-.nav-link:hover {
-  text-decoration: underline;
-}
-
-.nav-link {
+.nav-link{
+  display: inline-block;
+  margin-block: 0.5px;
+  position: relative;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: bold !important;
+  padding: 5px !important;
   color: rgb(240, 20, 155) !important;
 }
+
+.nav-link::after{
+content: "";
+width: 100%;
+height: 1px;
+border-radius: 1px;
+position: absolute;
+background-color: rgb(240, 20, 155);
+left: 0;
+bottom: 0;
+transform: scaleX(0);
+transform-origin: left;
+transition: transform .25s ease;
+}
+
+.nav-link:hover::after{
+  transform: scaleX(1);
+}
+
 
 .containerimg {
   min-height: 72vh;
@@ -51,17 +72,39 @@ footer {
   height: 150px;
 }
 
+
+#message {
+  color: #e24991;
+  font-size: 26px;
+  font-weight: bold;
+  height: 11rem;
+  padding-top: 10rem;
+  
+}
+
+.card img{
+backdrop-filter: blur(200px);
+}
+
+.card{
+  background-color: rgba(223, 223, 223, 0.829);
+  backdrop-filter: blur(800px);
+  border-radius: .5rem;
+  transition: transform .3s;
+  height: 24rem;
+}
 .card:hover {
   box-shadow: 5px 5px 5px rgba(189, 78, 130, 0.4);
-  transform: translateY(-3%);
+  transform: scale(1.04);
+  background-color: white;
 }
 
 .maincontact {
-  background: #3494e6 !important;
-  background: -webkit-linear-gradient(to right, #ec6ead, #3494e6) !important;
-  background: linear-gradient(to right, #ec6ead, #3494e6) !important;
+background-color: #f1d8e6;
   opacity: 0.8;
 }
+
+
 
 .container-contact {
   width: 70%;
@@ -134,16 +177,46 @@ footer {
 h1 {
   background-size: cover;
   background-position: center;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight:bold;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #f72277;
+
 }
 
-.nav-link {
-  font-weight: bold !important;
+.animate-charcter
+{
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    -225deg,
+    #3494e6 5%,
+    #44107a 29%,
+    #ff1361 67%,
+    #ec6ead 100%
+   
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 3s linear infinite;
+
+      font-size: 35px;
 }
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+
 
 table tr,
 td,
