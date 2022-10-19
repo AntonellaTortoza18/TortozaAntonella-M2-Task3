@@ -2,13 +2,7 @@ let container18 = document.getElementById("container18");
 let containerCheckBoxes = document.getElementById("js-container-check");
 let inputButton = document.getElementById("js-button");
 
-
-let pastEvents = data.events.filter(function (event) {
-  if (data.currentDate > event.date) {
-    return event;
-  }
-});
-
+let pastEvents = data.events.filter((event) => data.currentDate > event.date);
 
 function createCards(data) {
   container18.innerHTML = "";
@@ -25,7 +19,7 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: $${events.price}</p>
-              <a href="../pages/details.html" class="btn btn-dark">Read More></a>
+              <a href="../pages/details.html?id=${events._id}" target="_blank" class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);
@@ -99,7 +93,6 @@ checkBoxes.forEach((checks) => {
   });
 });
 
-
 //APLICACION DE ESCUCHADOR DE EVENTOS A LA BARRA SEARCH: creo una variable vacia de tipo string, llamada searchText para guardar los eventos de tipo keyup. Luego llamo y guardo el elemento (js-search) en la variable variable inputSearch, para usarlos en la funcion.
 
 let searchText = "";
@@ -109,13 +102,8 @@ inputSearch.addEventListener("input", function (evento) {
   filtradoCombinadoCyS();
 });
 
-//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH: CREO UNA VARIABLE DATOS DE TIPO STRING PARA USARLA COMO PARAMETRO LUEGO. ESTABLEZCO 4 POSIBILIDADES DE COMBINACION DE FILTROS.
-//1 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES MAYOR A CERO (HAY AL MENOS 1 CLICK) Y QUE SEARCHTEXT ES DIFERENTE A UN ARRAY VACIO (TIENE ALGUN VALOR) SE INCLUYA CON PUSH (A DATOS) EL FILTRO A EVENTOS MOSTRANDO EL NOMBRE DEL MISMO EN MINUSCULAS (CON METODO INCLUDES Y TRIM ELIMINANDO ESPACIOS) Y MUESTRE ADEMAS LA CATEGORIA DEL EVENTO SEGUN SU VALOR.
-//2 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES MAYOR A CERO (HAY AL MENOS 1 CLICK) Y QUE SEARCHTEXT ES IGUAL A UN ARRAY VACIO (NO TIENE NINGUN VALOR) SE INCLUYA CON PUSH (A DATOS) LA CATEGORIA DEL EVENTO SEGUN SU VALOR.
-//3 - SI CHECKSELECTED (QUE ARROJA EL EVENTO CLICK) ES IGUAL A CERO (ESTA VACIO) Y QUE SEARCHTEXT ES DIFERENTE A UN ARRAY VACIO (TIENE ALGUN VALOR) SE INCLUYA CON PUSH (A DATOS) EL FILTRO A EVENTOS MOSTRANDO EL NOMBRE DEL MISMO EN MINUSCULAS (CON METODO INCLUDES Y TRIM ELIMINANDO ESPACIOS).
-//4 - SI AMBOS ESTAN VACIOS, SE INCLUYA CON PUSH (A DATOS) EL ARRAY EVENTOS QUE CONTIENE TODAS LAS CARDS.
-//POR ULTIMO LLAMO A LA FUNCION CREATECARDS (QUE IMPRIME LAS CARDS) Y LE PASO COMO PARAMETRO EL ARRAY (DATOS) QUE CONTIENE ESTOS FILTROS.
-//POR ULTIMO EJECUTO LA FUNCION CON SU LLAMDADO.
+//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH
+//POR ULTIMO EJECUTO LA FUNCION CON SU LLAMADO.
 function filtradoCombinadoCyS() {
   let datos = [];
   if (checksSelected.length > 0 && searchText !== "") {
@@ -132,9 +120,7 @@ function filtradoCombinadoCyS() {
     );
   } else if (checksSelected.length > 0 && searchText == "") {
     checksSelected.map((categoria) =>
-      datos.push(
-        ...pastEvents.filter((evento) => evento.category == categoria)
-      )
+      datos.push(...pastEvents.filter((evento) => evento.category == categoria))
     );
   } else if (checksSelected.length == 0 && searchText !== "") {
     datos.push(
