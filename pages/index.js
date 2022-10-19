@@ -17,13 +17,13 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: $${events.price}</p>
-              <a href="./pages/details.html" class="btn btn-dark">Read More></a>
+              <a href="../pages/details.html?id=${events._id}" target="_blank" class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);
     });
   } else {
-    container18.innerHTML = `<p id="message"> Event not found, adjust search filter! </p>`;
+    container18.innerHTML = ` <p id="message"> Event not found, adjust search filter! </p>`;
     Swal.fire({
       icon: "error",
       title: "Oops...",
@@ -75,17 +75,19 @@ createCheckBoxes();
 //APLICACION DE ESCUCHADOR DE EVENTOS A LOS CHECKBOX: creo la variable checksSelected para poder guardar los eventos con clickeo o desclickeo, luego llamo a todos los elementos input con su clase y los guardo en una constante checBoxes para luego usarlos en la funcion.
 let checksSelected = [];
 const checkBoxes = document.querySelectorAll(".form-check-input");
-
 //Con forEach recorro el array checBoxes que almacena todos los input, para aplicarle a c/u de sus checks un escuchador de eventos de tipo click, y creo un condicional, en el cual establezco que al escuchar click, es decir true, se ingrese el valor del evento mediante el push al array que habia dejado vacio de checksSelected, y que de lo contrario lo filtre.
 // En cada condicional, sea true o false, llamo a la funcion de filtradoCombinadoCyS que me traera el contenido correspondiente.
 // esta funcion queda guardada en checksSelected para usarla en el filtrado.
- 
+
 checkBoxes.forEach((checks) => {
   checks.addEventListener("click", (event) => {
     let checked = event.target.checked;
+    console.log(checked);
     if (checked) {
       checksSelected.push(event.target.value);
+      console.log(checksSelected);
       filtradoCombinadoCyS();
+      console.log(checksSelected);
     } else {
       checksSelected = checksSelected.filter(
         (uncheck) => uncheck !== event.target.value
@@ -121,6 +123,7 @@ inputSearch.addEventListener("input", function (evento) {
 //POR ULTIMO EJECUTO LA FUNCION CON SU LLAMDADO.
 function filtradoCombinadoCyS() {
   let datos = [];
+  console.log(datos);
   if (checksSelected.length > 0 && searchText !== "") {
     checksSelected.map((categoria) =>
       datos.push(
