@@ -1,6 +1,5 @@
 let container18 = document.getElementById("container18");
 let containerCheckBoxes = document.getElementById("js-container-check");
-let inputButton = document.getElementById("js-button");
 
 function createCards(data) {
   container18.innerHTML = "";
@@ -59,9 +58,9 @@ function createCheckBoxes() {
                   <input
                     class="form-check-input"
                     type="checkbox" 
-                    value="${categoria}"  id="inlineCheckbox1"
+                    value="${categoria}"  id="${categoria}"
                   />
-                  <label class="form-check-label" for="inlineCheckbox1"
+                  <label class="form-check-label" for="${categoria}"
                     >${categoria}</label
                   >
                 </div>
@@ -101,18 +100,11 @@ checkBoxes.forEach((checks) => {
 
 let searchText = "";
 let inputSearch = document.getElementById("js-search");
-inputSearch.addEventListener("input", function (evento) {
+inputSearch.addEventListener("keyup", function (evento) {
   searchText = evento.target.value;
   filtradoCombinadoCyS();
 });
 
-// inputButton.addEventListener("click", function (event) {
-//   let evento = data.events.filter((cE) => {
-//     return cE.name.toLowerCase().includes(searchText.value.toLowerCase());
-//   });
-//   container18.innerHTML = "";
-//   evento.forEach(createCards);
-// });
 
 //CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH: 
 //POR ULTIMO EJECUTO LA FUNCION CON SU LLAMDADO.

@@ -1,9 +1,9 @@
 let container18 = document.getElementById("container18");
 
-console.log(location); // veo la propiedad location
-console.log(location.search);
-console.log(location.search.slice(4));
-console.log(data.events);
+// console.log(location); // veo la propiedad location
+// console.log(location.search);
+// console.log(location.search.slice(4));
+// console.log(data.events);
 let id = location.search.slice(4);
 const eventos = data.events;
 console.log(eventos);
