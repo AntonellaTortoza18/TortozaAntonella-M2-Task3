@@ -1,3 +1,45 @@
+getDatos();
+
+async function getDatos() {
+  try {
+    let res = await fetch("https://mind-hub.up.railway.app/amazing");
+    let data = await res.json();
+    let events = data.events;
+
+    createCards(events, "events");
+    createCheckBoxes(events);
+
+    const checkBoxes = document.querySelectorAll(".form-check-input");
+
+    checkBoxes.forEach((checks) => {
+      checks.addEventListener("click", (event) => {
+        let checked = event.target.checked;
+        console.log(checked);
+        if (checked) {
+          checksSelected.push(event.target.value);
+          console.log(checksSelected);
+          filtradoCombinadoCyS(events);
+          console.log(checksSelected);
+        } else {
+          checksSelected = checksSelected.filter(
+            (uncheck) => uncheck !== event.target.value
+          );
+          filtradoCombinadoCyS(events);
+        }
+      });
+    });
+
+    let inputSearch = document.getElementById("js-search");
+    inputSearch.addEventListener("keyup", function (evento) {
+      searchText = evento.target.value;
+      filtradoCombinadoCyS(events);
+    });
+  } catch {}
+}
+
+let checksSelected = [];
+let searchText = "";
+
 let container18 = document.getElementById("container18");
 let containerCheckBoxes = document.getElementById("js-container-check");
 
@@ -7,7 +49,6 @@ function createCards(data) {
     data.forEach((events) => {
       let div = document.createElement("div");
       div.className = "card card1";
-      div.style = "width:18rem;";
       div.innerHTML = `
             <img src="${events.image}" class="imgcard card-img-top"  alt:"${events.name}"/>
             <div class="card-body d-flex flex-column align-items-center text-center justify-content-between">
@@ -16,41 +57,33 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: $${events.price}</p>
-              <a href="../pages/details.html?id=${events._id}" target="_blank" class="btn btn-dark">Read More ></a>
+              <a href="../pages/details.html?id=${events.id}"  class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);
     });
   } else {
-    container18.innerHTML = ` <p id="message"> Event not found, adjust search filter! </p>`;
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Event not found, adjust search filter",
-      width: 600,
-      padding: "3em",
-      color: "#716add",
-      backdrop: `
-              rgba(0,0,123,0.4)
-              url("https://raw.githubusercontent.com/sweetalert2/sweetalert2.github.io/master/images/nyan-cat.gif")
-              left top
-              no-repeat
-            `,
-    });
+    container18.innerHTML = ` 
+    <div class=container-message><img src="${"https://cdn.boletius.com/images/v3/search.png"}" class="img-message"  alt:"${"Event not found"}"/>
+    <p id="message"> Event not found, adjust search filter! </p>
+    </div>`;
   }
 }
-createCards(data.events);
 
 //FILTRADO DE CATEGORIAS Y ELIMINACION DE DUPLICADOS:
-let categoriesEvents = data.events.map((event) => event.category);
+
 //Recorro el array de eventos con map y separo de este la propiedad categorias.
-console.log(categoriesEvents);
+// console.log(categoriesEvents);
 //Dado que al recorrer el array anterior me va a dar todas las categorias, con el metodo set elimino las repetidas y dejo solo el primer elemento encontrado, el resto lo descarta y guardo el dato obtenido con el metodo anterior en la variable categoriesEventsFilter.
-let categoriesEventsFilter = [...new Set(categoriesEvents)];
+// let categoriesEventsFilter = [...new Set(categoriesEvents)];
 
 //CREACION DE CHECKBOX DINAMICOS: declaro dentro de la funcion createCheckBoxes la variable vacia checkContainer, luego con la funcion forEach recorro categoriesEventsFilter, que son las categorias que habia filtrado anteriormente, para que pueda recoorer el array completo y utilice el parametro categoria para que en cada vuelta del forEacg aloje en checContainer el templete, luego llamo al dom, al elemento padre, que es containerCheckBoxes y le imprimo el contenido de checkContainer. .
 
-function createCheckBoxes() {
+function createCheckBoxes(array) {
+  let categoriesEvents = array.map((event) => event.category);
+  console.log(categoriesEvents);
+  let categoriesEventsFilter = [...new Set(categoriesEvents)];
+  console.log(categoriesEventsFilter);
   checkContainer = "";
   categoriesEventsFilter.forEach((categoria) => {
     checkContainer += `
@@ -69,52 +102,23 @@ function createCheckBoxes() {
   containerCheckBoxes.innerHTML = checkContainer;
 }
 
-createCheckBoxes();
-
 //APLICACION DE ESCUCHADOR DE EVENTOS A LOS CHECKBOX: creo la variable checksSelected para poder guardar los eventos con clickeo o desclickeo, luego llamo a todos los elementos input con su clase y los guardo en una constante checBoxes para luego usarlos en la funcion.
-let checksSelected = [];
-const checkBoxes = document.querySelectorAll(".form-check-input");
+
 //Con forEach recorro el array checBoxes que almacena todos los input, para aplicarle a c/u de sus checks un escuchador de eventos de tipo click, y creo un condicional, en el cual establezco que al escuchar click, es decir true, se ingrese el valor del evento mediante el push al array que habia dejado vacio de checksSelected, y que de lo contrario lo filtre.
 // En cada condicional, sea true o false, llamo a la funcion de filtradoCombinadoCyS que me traera el contenido correspondiente.
 // esta funcion queda guardada en checksSelected para usarla en el filtrado.
 
-checkBoxes.forEach((checks) => {
-  checks.addEventListener("click", (event) => {
-    let checked = event.target.checked;
-    console.log(checked);
-    if (checked) {
-      checksSelected.push(event.target.value);
-      console.log(checksSelected);
-      filtradoCombinadoCyS();
-      console.log(checksSelected);
-    } else {
-      checksSelected = checksSelected.filter(
-        (uncheck) => uncheck !== event.target.value
-      );
-      filtradoCombinadoCyS();
-    }
-  });
-});
-
 //APLICACION DE ESCUCHADOR DE EVENTOS A LA BARRA SEARCH: creo una variable vacia de tipo string, llamada searchText para guardar los eventos de tipo keyup. Luego llamo y guardo el elemento (js-search) en la variable variable inputSearch, para usarlos en la funcion.
 
-let searchText = "";
-let inputSearch = document.getElementById("js-search");
-inputSearch.addEventListener("keyup", function (evento) {
-  searchText = evento.target.value;
-  filtradoCombinadoCyS();
-});
-
-
-//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH: 
+//CREACION DE LA FUNCION DE FILTRADO COMBINANDO LOS EVENTOS DE CHECKBOX Y SEARCH:
 //POR ULTIMO EJECUTO LA FUNCION CON SU LLAMDADO.
-function filtradoCombinadoCyS() {
+function filtradoCombinadoCyS(array) {
   let datos = [];
-  console.log(datos);
+
   if (checksSelected.length > 0 && searchText !== "") {
     checksSelected.map((categoria) =>
       datos.push(
-        ...data.events.filter(
+        ...array.filter(
           (evento) =>
             evento.name
               .toLowerCase()
@@ -125,13 +129,11 @@ function filtradoCombinadoCyS() {
     );
   } else if (checksSelected.length > 0 && searchText == "") {
     checksSelected.map((categoria) =>
-      datos.push(
-        ...data.events.filter((evento) => evento.category == categoria)
-      )
+      datos.push(...array.filter((evento) => evento.category == categoria))
     );
   } else if (checksSelected.length == 0 && searchText !== "") {
     datos.push(
-      ...data.events.filter(
+      ...array.filter(
         (evento) =>
           evento.name.toLowerCase().includes(searchText.trim().toLowerCase()) ||
           evento.category
@@ -140,11 +142,10 @@ function filtradoCombinadoCyS() {
       )
     );
   } else {
-    datos.push(...data.events);
+    datos.push(...array);
   }
   createCards(datos);
 }
-filtradoCombinadoCyS();
 
 //  alt + 96 backticks
 // alt + 39 '' comillas simples

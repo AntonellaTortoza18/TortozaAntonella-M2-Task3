@@ -65,86 +65,46 @@
       </nav>
       <h1 class="text-center p-3 animate-charcter">Stats</h1>
     </header>
-    <main class="mainstats d-flex justify-content-center">
-      <table class="stats">
-        <tr>
-          <th class="tittletable" colspan="3">Events statistics</th>
-        </tr>
-        <tr>
-          <td class="tdbolder">
-            Events with the highest percentage of attendance
-          </td>
-          <td class="tdbolder">
-            Events with the lowest percentage of attendance
-          </td>
-          <td class="tdbolder">Events with larger capacity</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <th class="tittletable" colspan="3">
-            Upcoming events statistics by category
-          </th>
-        </tr>
-        <tr>
-          <td class="tdbolder">Categories</td>
-          <td class="tdbolder">Revenues</td>
-          <td class="tdbolder">Percentage of attendance</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <th class="tittletable" colspan="3">
-            Past events statistics by category
-          </th>
-        </tr>
-        <tr>
-          <td class="tdbolder">Categories</td>
-          <td class="tdbolder">Revenues</td>
-          <td class="tdbolder">Percentage of attendance</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-        <tr>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-          <td>ㅤ</td>
-        </tr>
-      </table>
+    <main>
+        <div class="box-main">
+          <table class="table container">
+              <thead>
+                  <tr class="tittletable">
+                      <th colspan="3">EVENTS STATISTICS</th>
+                  </tr>
+              </thead>
+              <tbody id="tableOne">
+              </tbody>
+          </table>
+          <table class="table container">
+              <thead>
+                  <tr class="tittletable">
+                      <th colspan="3">UPCOMING EVENTS STATISTICS BY CATEGORY</th>
+                  </tr>
+              </thead>
+              <tbody id="tableUpcoming">
+                  <tr class="subtitle">
+                      <td class="table-subtitle">Categories</td>
+                      <td class="table-subtitle">Revenues</td>
+                      <td class="table-subtitle">Percentage of estimated attendance</td>
+                  </tr>
+              </tbody>
+          </table>
+          <table class="table container">
+              <thead>
+                  <tr class="tittletable">
+                      <th colspan="3">PAST EVENTS STATISTICS BY CATEGORY</th>
+                  </tr>
+              </thead>
+              <tbody id="tablePast">
+                  <tr class="subtitle">
+                      <td class="table-subtitle">Categories</td>
+                      <td class="table-subtitle">Revenues</td>
+                      <td class="table-subtitle">Percentage of attendance</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
     </main>
 
     <div>
@@ -203,5 +163,6 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script src="./stats.js"></script>
   </body>
 </html>
