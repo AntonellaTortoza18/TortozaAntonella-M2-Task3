@@ -31,8 +31,8 @@ async function getDatos (){
      filtradoCombinadoCyS(upcomingEvents);
    });
 
-} catch{
- 
+} catch(error) {
+  console.log(error)
 }
 }
 getDatos()
@@ -55,7 +55,7 @@ function createCards(data) {
               <p class="card-text">
               ${events.description}
               </p>
-              <p class="price">Price: $${events.price}</p>
+              <p class="price">Price: US$${events.price}</p>
               <a href="../pages/details.html?id=${events.id}" class="btn btn-dark">Read More ></a>
             </div>
             `;
