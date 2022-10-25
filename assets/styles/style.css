@@ -57,10 +57,6 @@ footer {
   transform: scaleX(1);
 }
 
-.form-control {
-  width: 280px;
-}
-
 .containerimg {
   min-height: 72vh;
   width: 30%;
@@ -75,7 +71,7 @@ footer {
   height: 150px;
 }
 
-.container-message{
+.container-message {
   padding: 50px;
   display: flex;
   flex-direction: column;
@@ -84,14 +80,14 @@ footer {
 }
 
 #message {
-  color:#e20074;
+  color: #e20074;
   font-size: 26px;
   font-weight: bold;
   height: 11rem;
   padding-top: 5px;
 }
 
-.img-message{
+.img-message {
   width: 180px;
 }
 
@@ -99,12 +95,11 @@ footer {
   backdrop-filter: blur(200px);
 }
 
-.card1{
+.card1 {
   min-height: 24rem;
- width:19.5rem;
+  width: 19.5rem;
 }
 .card {
- 
   backdrop-filter: blur(800px);
   border-radius: 0.5rem;
   transition: transform 0.3s;
@@ -115,7 +110,6 @@ footer {
 .card:hover {
   box-shadow: 5px 5px 5px rgba(189, 78, 130, 0.4);
   transform: translateY(-2%);
-
 }
 
 .maincontact {
@@ -137,8 +131,8 @@ footer {
 }
 
 .botonenviar {
-  width: 6rem;
-  height: 45px;
+  width: 5rem;
+  height: 40px;
   border-radius: 3mm;
   letter-spacing: 2px;
   background-image: linear-gradient(-216deg, #d63a76, #8c0038 50%, #d63a76);
@@ -147,7 +141,8 @@ footer {
   color: #fff;
   -webkit-text-fill-color: currentcolor;
   font-family: "Work Sans", sans-serif;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .btn {
@@ -229,7 +224,7 @@ h1 {
   }
 }
 
-.box-main{
+.box-main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -239,25 +234,31 @@ h1 {
 table tr,
 td,
 th {
-  border: 1px solid #e20074;
+  border: 1px solid  #3494e6;
   border-collapse: collapse;
+  font-size: 14px !important;
 }
 
-
-td {
+tr {
+  background-color: rgb(226, 206, 215) ;
   width: 30%;
   border-left: 1px solid #e20074 !important;
-  padding: 0.2rem;
+
 }
 
-
+tbody tr:hover{
+background-color:#cdbcdf ;
+}
 .tittletable {
-  background-color: rgb(223, 164, 198);
+  background-color:  #b59bd1;
+  font-size: 15px !important;
 }
+
 
 .table-subtitle {
-  background-color: rgb(218, 198, 209) !important;
+  background-color: #cdbcdf!important;
   font-weight: 600;
+ 
 }
 
 .card1 {
@@ -269,8 +270,6 @@ td {
   color: #1e469c;
   font-weight: bolder;
 }
-
-
 
 .form-check input[type="checkbox"]:checked {
   background-color: #e20074;
@@ -293,6 +292,8 @@ td {
     border-top: 2px solid #e24991;
   }
 }
+
+
 
 @media screen and (max-width: 375px) {
   .container-contact {

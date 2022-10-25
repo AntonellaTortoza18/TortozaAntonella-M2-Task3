@@ -1,156 +1,182 @@
 async function getDatos() {
-  let res = await fetch("https://mind-hub.up.railway.app/amazing");
-  let data = await res.json();
-  let events = data.events;
-  // console.log(events);
-//
-  let res1 = await fetch("https://mind-hub.up.railway.app/amazing/?time=past");
-  let data1 = await res1.json();
-  let pastEvents = data1.events;
-  // console.log(pastEvents);
-//
-  let respon = await fetch(
-    "https://mind-hub.up.railway.app/amazing/?time=upcoming"
-  );
-  let data2 = await respon.json();
-  let upcomingEvents = data2.events;
-  // console.log(upcomingEvents);
+  try {
+    let res = await fetch("https://mind-hub.up.railway.app/amazing");
+    let data = await res.json();
+    let events = data.events;
+    // console.log(events);
+    // EVENTOS PASADOS
+    let pastEvents = events.filter((event) => data.date > event.date);
+    // console.log(pastEvents);
+    // filtro categorias de eventos pasados y las ordeno por orden alfabetico
+    let categoriesEventsPast = pastEvents.map((event) => event.category);
+    let categoriesEventsFilterPast = [...new Set(categoriesEventsPast)];
+    let categoriesFilterPastSort = [...categoriesEventsFilterPast].sort();
+    // console.log(categoriesFilterPastSort);
+    // console.log(categoriesEventsFilterPast);
+    // recorro el array de eventos pasados con map y le agrego dos nuevas propiedades a cada evento, percentage y gananciaReal.
+    pastEvents.map((everyEvent) => {
+      let assistance = everyEvent.assistance;
+      let capacity = everyEvent.capacity;
+      let percentage = ((assistance / capacity) * 100).toFixed(1);
+      everyEvent.percentage = percentage;
+      let gananciaReal = everyEvent.price * everyEvent.assistance;
+      everyEvent.ganancia = gananciaReal;
+    });
 
-// filtro categorias de eventos pasados
-let categoriesEventsPast = pastEvents.map(event => event.category);
-let categoriesEventsFilterPast = [...new Set (categoriesEventsPast)]
-console.log(categoriesEventsFilterPast);
-// recorro el array de eventos pasados con map y le agrego dos nuevas propiedades a cada evento, percentage y gananciaReal.
- pastEvents.map((everyEvent) => {
-    let assistance = everyEvent.assistance;
-    let capacity = everyEvent.capacity;
-    let percentage = ((assistance / capacity) * 100).toFixed();
-    everyEvent.percentage = percentage;
-    let gananciaReal = (everyEvent.price * everyEvent.assistance)
-    everyEvent.ganancia = gananciaReal
+    // MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
+    let arrayEventsPast = categoriesFilterPastSort
+      .map((cadaCategoria) => {
+        let arrayFiltradoPast = pastEvents.filter(
+          (cadaEvento) => cadaEvento.category === cadaCategoria
+        );
+        return reduceStatsPast(arrayFiltradoPast);
+      })
+      .forEach(tablePast);
    
-  });
 
-  // MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
-  let arrayEventsPast = categoriesEventsFilterPast.map(cadaCategoria =>{
-    let arrayFiltradoPast = pastEvents.filter(cadaEvento => cadaEvento.category === cadaCategoria)
-    return arrayFiltradoPast
-  
-  })
-  console.log(arrayEventsPast);
+    function reduceStatsPast(array) {
+      let elemento0 = {
+        category: "",
+        ganancia: 0,
+        capacity: 0,
+        assistance: 0,
+      };
+      let statsPast = array.reduce((elemento1, elemento2) => {
+        return {
+          category: elemento2.category,
+          ganancia: elemento1.ganancia + elemento2.ganancia,
+          capacity: elemento1.capacity + elemento2.capacity,
+          assistance: elemento1.assistance + elemento2.assistance,
+        };
+      }, elemento0);
+      statsPast.percentage = (
+        (100 * statsPast.assistance) /
+        statsPast.capacity
+      ).toFixed(1);
+      // console.log(statsPast);
+      return statsPast;
+    }
 
-// Creo la variable ordenadoPorAsistencia que va a recorrer el array de eventos pasados con sort y este va a ordenar de menor a mayor los eventos segun su asistencia.
-let ordenadoPorAsistencia =[...pastEvents].sort((evento1,evento2) => evento1.assistance - evento2.assistance)
-// let mayorPorcentajeAsistencia = ordenadoPorAsistencia[ordenadoPorAsistencia.length-1]
-// let menorPorcentajeAsistencia = ordenadoPorAsistencia[0]
+    // Creo la variable ordenadoPorAsistencia que va a recorrer el array de eventos pasados con sort y este va a ordenar de menor a mayor los eventos segun su asistencia.
+    let ordenadoPorAsistencia = [...pastEvents].sort(
+      (evento1, evento2) => evento1.percentage - evento2.percentage
+    );
+    let mayorPorcentajeAsistencia =
+      ordenadoPorAsistencia[ordenadoPorAsistencia.length - 1];
+    let menorPorcentajeAsistencia = ordenadoPorAsistencia[0];
 
-// Creo la variable ordenadoPorCapacidad que va a recorrer el array de eventos pasados con sort y este va a ordenar de menor a mayor los eventos segun su capacidad.
-let ordenadoPorCapacidad = [...pastEvents].sort((evento1,evento2)=> evento1.capacity-evento2.capacity)
-// let mayorCapacidad = ordenadoPorCapacidad[ordenadoPorCapacidad.length-1]
-// let menorCapacidad = ordenadoPorCapacidad[0]
+    // Creo la variable ordenadoPorCapacidad que va a recorrer el array de eventos pasados con sort y este va a ordenar de menor a mayor los eventos segun su capacidad.
+    let ordenadoPorCapacidad = [...pastEvents].sort(
+      (evento1, evento2) => evento1.capacity - evento2.capacity
+    );
+    let mayorCapacidad = ordenadoPorCapacidad[ordenadoPorCapacidad.length - 1];
+    //  console.log(ordenadoPorCapacidad);
 
-  table1(ordenadoPorAsistencia, ordenadoPorCapacidad);
+    //llamado de la funcion table1, que me va a imprimir la primer parte de la tabla
+    table1(
+      mayorPorcentajeAsistencia,
+      menorPorcentajeAsistencia,
+      mayorCapacidad
+    );
 
+    // EVENTOS FUTUROS
+    let upcomingEvents = events.filter((event) => data.date < event.date);
+    // console.log(upcomingEvents);
 
+    // filtro categorias de eventos futuros y las ordeno por orden alfabetico.
+    let categoriesEventsUpcoming = upcomingEvents.map(
+      (event) => event.category
+    );
+    let categoriesEventsFilterUpcoming = [...new Set(categoriesEventsUpcoming)];
+    let categoriesFilterUpcomingSort = [
+      ...categoriesEventsFilterUpcoming,
+    ].sort();
+    // console.log(categoriesFilterUpcomingSort);
 
-
-
-
-
-// filtro categorias de eventos futuros
-  let categoriesEventsUpcoming = upcomingEvents.map(event => event.category);
-  let categoriesEventsFilterUpcoming = [...new Set(categoriesEventsUpcoming)];
-  console.log(categoriesEventsFilterUpcoming);
-// recorro el array de eventos futuros con map y le agrego dos nuevas propiedades a cada evento, percentage y ganancia estimada.
+    // recorro el array de eventos futuros con map y le agrego dos nuevas propiedades a cada evento, percentage y ganancia estimada.
     upcomingEvents.map((everyEvent) => {
-    let estimate = everyEvent.estimate;
-    let capacity = everyEvent.capacity;
-    let percentageAssistEst = ((estimate / capacity) * 100).toFixed();
-    everyEvent.percentage = percentageAssistEst;
-    let gananciaEstimate = (everyEvent.price * everyEvent.estimate)
-    everyEvent.ganancia = gananciaEstimate
-  });
+      let estimate = everyEvent.estimate;
+      let capacity = everyEvent.capacity;
+      let percentageAssistEst = ((estimate / capacity) * 100).toFixed(1);
+      everyEvent.percentage = percentageAssistEst;
+      let gananciaEstimate = everyEvent.price * everyEvent.estimate;
+      everyEvent.ganancia = gananciaEstimate;
+    });
 
-// MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
-  let arrayEventsUpcoming = categoriesEventsFilterUpcoming.map(cadaCategoria =>{
-    let arrayFiltradoUpcoming = upcomingEvents.filter(cadaEvento => cadaEvento.category === cadaCategoria)
-    return arrayFiltradoUpcoming
-  
-  })
-  console.log(arrayEventsUpcoming);
+    // MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
 
-// REDUCE para obtener la ganancia y el porcentaje total estimado de c/ categoria
+    let arrayEventsUpcoming = categoriesFilterUpcomingSort
+      .map((cadaCategoria) => {
+        let arrayFiltradoUpcoming = upcomingEvents.filter(
+          (cadaEvento) => cadaEvento.category === cadaCategoria
+        );
 
-
-
-
-
-
-
+        return reduceStatsUpcoming(arrayFiltradoUpcoming);
+      })
+      let ordenadoPorGanancia = [...arrayEventsUpcoming].sort(
+        (evento1, evento2) => evento2.ganancia - evento1.ganancia
+      );
+      tableUpcoming(ordenadoPorGanancia)
 
 
+
+    function reduceStatsUpcoming(array) {
+      let elemento0 = {
+        category: "",
+        ganancia: 0,
+        capacity: 0,
+        estimate: 0,
+      };
+      let statsUpcoming = array.reduce((elemento1, elemento2) => {
+        return {
+          category: elemento2.category,
+          ganancia: elemento1.ganancia + elemento2.ganancia,
+          capacity: elemento1.capacity + elemento2.capacity,
+          estimate: elemento1.estimate + elemento2.estimate,
+        };
+      }, elemento0);
+      statsUpcoming.percentage = (
+        (100 * statsUpcoming.estimate) /
+        statsUpcoming.capacity
+      ).toFixed(1);
+      // console.log(statsUpcoming);
+
+      return statsUpcoming;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 getDatos();
 
-function table1(arrayAsistencia, arrayCapacidad) {
-  let tableOne = `<tr class= "subtitle">
-                       <td class="table-subtitle">Event with the highest percentage of attendance</td>
-                       <td class="table-subtitle">Event with the lowest percentage of attendance</td>
-                       <td class="table-subtitle">Event with larger capacity</td>
-                    </tr>
-                    <tr>
-                    <td>${arrayAsistencia[arrayAsistencia.length-1].name}:  ${arrayAsistencia[arrayAsistencia.length-1].percentage}% of attendance </td>
-                    <td>${arrayAsistencia[0].name}: ${arrayAsistencia[0].percentage}% of attendance</td>
-                    
-                   <td>${arrayCapacidad[arrayCapacidad.length-1].name}: ${arrayCapacidad[arrayCapacidad.length-1].capacity} total capacity</td>
-                    </tr>`;
-  document.getElementById("tableOne").innerHTML = tableOne;
+function table1(maxP, minP, maxC) {
+  let tableOne = document.getElementById("tableOne");
+  tableOne.innerHTML += `
+    <tr>
+    <td>${maxP.name}: ${maxP.percentage}% of attendance </td>
+    <td>${minP.name}: ${minP.percentage}% of attendance</td>
+    <td>${maxC.name}: ${maxC.capacity} total capacity</td>
+     </tr>
+    `;
 }
 
 function tableUpcoming(array) {
-  let tableUpcoming = ` <tr class="subtitle">
-  <td class="table-subtitle">Categories</td>
-  <td class="table-subtitle">Revenues</td>
-  <td class="table-subtitle">Percentage of estimated attendance</td>
-</tr>`
-array.forEach((event)=>{
-  tableUpcoming += `<tr>
-  <td>${event}</td>
-   <td> ${event.gananciaEstimate}</td>
-  <td>${event.percentageAssistEst}</td>
-   </tr>`;
-})
-
-  document.getElementById("tableUpcoming").innerHTML = tableUpcoming;
+  array.forEach((event)=>{
+    let tableUpcoming2 = document.getElementById("tableUpcoming");
+    tableUpcoming2.innerHTML += `<tr>
+    <td>${event.category}</td>
+     <td>US$ ${event.ganancia}</td>
+    <td>${event.percentage}%</td>
+     </tr>`;
+  })
+ 
 }
 
-// function tablePast(categories, arrayPast) {
-//   let tablePast = `
-//   <tr class="subtitle">
-//   <td class="table-subtitle">Categories</td>
-//   <td class="table-subtitle">Revenues</td>
-//   <td class="table-subtitle">Percentage of attendance</td>
-// </tr>
-
-// <tr>
-
-// <td>${categories.categoriesEventsFilter[0]}</td>
-//  <td> ${arrayPast.ganancia[0]}</td>
-// <td>${arrayPast.percentage[0]}</td>
-//  </tr>
-
-//   `;
-//   document.getElementById("tablePast").innerHTML = tablePast;
-// }
-
-// function tablePast(arrayCategories, event){
-//   let tr = document.createElement("tr");
-//   arrayCategories.forEach((event)=> {
-//     tr.innerHTML = `
-//      <td>${event}</td>
-//  <td> ${d}</td>
-//  <td>${sa}</td>
-//  `
-//  })
-
-// }
+function tablePast(array) {
+  let tablePast2 = document.getElementById("tablePast");
+  tablePast2.innerHTML += `<tr>
+  <td>${array.category}</td>
+   <td>US$ ${array.ganancia}</td>
+  <td>${array.percentage}%</td>
+   </tr>`;
+}

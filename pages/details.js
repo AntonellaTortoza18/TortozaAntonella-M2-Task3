@@ -12,8 +12,8 @@ async function getDatos (){
   console.log(date);
    createCardDetails(events)
   
-} catch{
- 
+} catch(error) {
+  console.log(error)
 }
 }
 getDatos()
@@ -40,7 +40,7 @@ function createCardDetails(event) {
             <p>Place: ${event.place}</p>
             <p>Capacity: ${event.capacity}</p>
             <p>Assistance: ${event.assistance || event.estimate + " Estimate"}</p>
-            <p class="price">Price: $${event.price}</p>
+            <p class="price">Price: US$${event.price}</p>
         </div>
                 `;
     container18.appendChild(div);
